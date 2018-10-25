@@ -1,0 +1,17 @@
+{
+  "name": "refdb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "M Bradley",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^3.0.4"
+  },
+  "dependencies": {
+    "mysql": "^2.16.0"
+  }
+}
