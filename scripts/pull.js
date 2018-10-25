@@ -4,10 +4,10 @@ function grabData(hostname,username,dbpassword,dbdatabase,dbtable){
 
     var connection = mysql.createConnection({
 
-        host : 'hostname',
-        user : 'username',
-        password : 'dbpassword',
-        database : 'dbdatabase'
+        host : hostname,
+        user : username,
+        password : dbpassword,
+        database : dbdatabase
         
     });
 
