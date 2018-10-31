@@ -16,11 +16,20 @@ function serverDetails(){
     return connectionInfo;
 }
 
+function targetTable(){
+
+    var fs = require('fs');
+    var dbtable = fs.readFileSync('connection_details.txt').toString().split("\n");
+    return dbtable[4];
+
+}
+
 
 //function pipeFieldsDropDown(element,hostname,username,dbpassword,dbdatabase,dbtable){
     
-function pipeFieldsDropDown(element,dbtable){
+function pipeFieldsDropDown(element){
 
+    dbtable = targetTable();
     var mysql = require('mysql');
     var connectObj = serverDetails();
     var connection = mysql.createConnection(connectObj);
@@ -45,8 +54,9 @@ function pipeFieldsDropDown(element,dbtable){
 
 // Get names from results  
 
-function pipeResultsDropDown(element,dbtable,fieldname){
+function pipeResultsDropDown(element,fieldname){
 
+    dbtable = targetTable();
     var mysql = require('mysql');
     var connectionInfo = serverDetails();
     var connection = mysql.createConnection(connectionInfo);
@@ -76,7 +86,9 @@ function pipeResultsDropDown(element,dbtable,fieldname){
 // Requires array of data and destination element
 function dropDown(array, element){
 
+    document.getElementById(element).innerHTML = "";
     var dditems = document.getElementById(element);
+
 
     for (var i = 0;i < array.length; i++){
 
@@ -105,9 +117,9 @@ function devprint(arrayCapture){
     document.getElementById('pullit').innerHTML =  outstream;
 }
 
-function mainDisplaySequence(dbtable){
+function mainDisplaySequence(){
 
+    dbtable = targetTable();
     pipeFieldsDropDown('field_list',dbtable);
-    pipeResultsDropDown('field_list2',dbtable,'last_name') // DEV 311018 insert field name here
 
 }
