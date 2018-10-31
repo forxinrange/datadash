@@ -1,13 +1,38 @@
 <!DOCTYPE html>
+
 <html>
+
     <head>
+
         <meta charset="UTF-8">
-        <script src="scripts/pull.js" type="text/javascript"></script>
+
+        <script src="scripts/engine.js" type="text/javascript"></script>
+
         <title>database</title>
     </head>
+
     <body>
+
         <h1>Database Pull</h1>
+
         <p id="pullit"></p>
-        <script>grabData()</script>
+
+        <script>mainDisplaySequence('devDummyData')</script>
+
+        <form name="list1" action="DevPrintForm()" method="POST">
+
+            <SELECT id="field_list">
+
+            </SELECT>
+
+            <SELECT id="field_list2">
+
+            </SELECT>
+
+        </form>
+
+        <p id="devarea"></p>
+
     </body>
+
 </html>

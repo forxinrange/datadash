@@ -12,6 +12,8 @@
     "electron": "^3.0.4"
   },
   "dependencies": {
-    "mysql": "^2.16.0"
+    "fs": "0.0.1-security",
+    "mysql": "^2.16.0",
+    "read-xml": "^3.0.0"
   }
 }
