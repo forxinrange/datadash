@@ -1,4 +1,3 @@
-
 // Get all names of fields and pipe them to a drop down box
 
 function serverDetails(){
@@ -23,6 +22,11 @@ function targetTable(){
     return dbtable[4];
 
 }
+
+
+// Save XML configuration file
+
+
 
 //function pipeFieldsDropDown(element,hostname,username,dbpassword,dbdatabase,dbtable){
     
@@ -83,6 +87,13 @@ function pipeResultsDropDown(element,fieldname){
 
 }
 
+function setOptions(element){
+
+    var Settingsoptions = new Array('Count','Select');
+    dropDown(Settingsoptions,element);
+
+}
+
 
 // This function clears out duplicate entries from array ready for manipulation
 
@@ -124,6 +135,45 @@ function dropDown(array, element){
 
 }
 
+function outputResult(element,resultValue){
+
+    document.getElementById(element).value = resultValue;
+
+}
+
+
+function processResult(element,condition){
+
+
+    dbtable = targetTable();
+    fieldCondition = document.getElementById('field_list').value;
+    searchCondition = document.getElementById('field_list2').value;
+    var mysql = require('mysql');
+    var connectObj = serverDetails();
+    var connection = mysql.createConnection(connectObj);
+    connection.connect();
+
+    if(condition == 'Count'){
+
+        sqlcom = "SELECT count(*) FROM " + dbtable + " WHERE " + fieldCondition+"='"+searchCondition+"'"; 
+
+    }
+    
+    //document.getElementById('pullit').innerHTML =  sqlcom; //uncommment line for debugging
+   
+    
+    connection.query(sqlcom, function(error, rows, fields){
+
+        var fieldname = 'count(*)';
+        var result = rows[0][fieldname];
+        outputResult(element,result);
+
+        connection.destroy();
+    
+    })
+
+}
+
 //DEVTOOL
 
 function devprint(arrayCapture){
@@ -141,7 +191,8 @@ function devprint(arrayCapture){
 
 function mainDisplaySequence(){
 
-    dbtable = targetTable();
+
+    var dbtable = targetTable();
     pipeFieldsDropDown('field_list',dbtable);
 
 }

@@ -21,13 +21,15 @@
 
         <form name="list1" action="DevPrintForm()" method="POST">
 
-            <SELECT id="field_list" onchange="pipeResultsDropDown('field_list2',this.value)">
+            <SELECT id="field_list" onchange="pipeResultsDropDown('field_list2',this.value)"></SELECT>
 
-            </SELECT>
+            <SELECT id="field_list2" onchange="setOptions('field_list3')"></SELECT>
 
-            <SELECT id="field_list2">
+            <SELECT id="field_list3" onchange="processResult('result_box',this.value)"></SELECT>
 
-            </SELECT>
+            <INPUT id='result_box' type="text" value="">
+
+
 
         </form>
 
