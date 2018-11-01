@@ -51,7 +51,7 @@ function pipeFieldsDropDown(element){
 
 }
 
-// Get names from results  
+// Get names from results and pass to drop down function
 
 function pipeResultsDropDown(element,fieldname){
 
@@ -73,13 +73,36 @@ function pipeResultsDropDown(element,fieldname){
 
         resultsArray.sort();
 
-        dropDown(resultsArray, element);
+        cleanResults = removeDuplicates(resultsArray);
+
+        dropDown(cleanResults, element);
 
         connection.destroy();
 
     })
 
 }
+
+
+// This function clears out duplicate entries from array ready for manipulation
+
+function removeDuplicates(targetArray){
+
+    var cleanArray = new Array;
+
+    for(var i = 0;i < targetArray.length; i++){
+
+        if(cleanArray.indexOf(targetArray[i]) == -1){
+            
+            cleanArray.push(targetArray[i]);
+        }
+    }
+
+    return cleanArray;
+
+}
+
+
 
 // This function will populate a list based upon a drop down box element within a form
 // Requires array of data and destination element
