@@ -142,12 +142,12 @@ function outputResult(element,resultValue){
 }
 
 
-function processResult(element,condition){
+function processResult(element,fc,sc,condition){
 
 
     dbtable = targetTable();
-    fieldCondition = document.getElementById('field_list').value;
-    searchCondition = document.getElementById('field_list2').value;
+    fieldCondition = document.getElementById(fc).value;
+    searchCondition = document.getElementById(sc).value;
     var mysql = require('mysql');
     var connectObj = serverDetails();
     var connection = mysql.createConnection(connectObj);
@@ -191,6 +191,8 @@ function devprint(arrayCapture){
 
 function mainDisplaySequence(){
 
+    let startI = 0;
+    
 
     var dbtable = targetTable();
     pipeFieldsDropDown('field_list',dbtable);
