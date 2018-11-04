@@ -6,34 +6,29 @@
 
         <meta charset="UTF-8">
 
-        <script src="scripts/editengine.js" type="text/javascript"></script>
+        <script src="scripts/dd_edit_engine.js" type="text/javascript"></script>
 
         <title>DataDash Editor</title>
+
     </head>
 
     <body>
 
         <h1>DataDash Editor</h1>
 
-        <p id="pullit"></p>
+        <script></script>
 
-        <script>mainDisplaySequence()</script>
+        <input id="addSection" type="button" value="Add Edit" onclick="create_select_element('masterEDIT');"/>
+        <input id="remSection" type="button" value="Remove Edit" onclick="delete_select_element('masterEDIT');"/>
+        <form id="masterEDIT">
 
-        <form name="list1" action="DevPrintForm()" method="POST">
-
-            <SELECT id="field_list" onchange="pipeResultsDropDown('field_list2',this.value)"></SELECT>
-
-            <SELECT id="field_list2" onchange="setOptions('field_list3')"></SELECT>
-
-            <SELECT id="field_list3" onchange="processResult('result_box','field_list','field_list2',this.value)"></SELECT>
-
-            <INPUT id='result_box' type="text" value="">
 
 
 
         </form>
 
-        
-    </body>2
+        <p id="devTest"></p>
+
+    </body>
 
 </html>
