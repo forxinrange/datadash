@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Editor</title>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href ="CSS/datadash.css" type="text/css" title="Stylesheet">
+      <!-- icons -->
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+
+      <!--colour picker-->
+      <script src='spectrum.js'></script>
+      <link rel='stylesheet' href='spectrum.css' />
+
+      <!-- Insert this line above script imports  -->
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
+
+    <!-- jQuery Library -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <!-- jQuery UI Library -->
+      <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+    <!-- Scripts -->
+    <script  src="Scripts/navigation.js"></script>
+
+    <!-- Insert this line after script imports -->
+    <script>if (window.module) module = window.module;</script>
+
+
+</head>
+<body>
+
+<div id="testOne" contenteditable data-name="custom-text">Test this text!</div>
+<div id="testTwo" contenteditable data-name="custom-text">And test this too!</div>
+
+<script>
+document.addEventListener('keydown', function (event) {
+  var esc = event.which == 27,
+      nl = event.which == 13,
+      el = event.target,
+      input = el.nodeName != 'INPUT' && el.nodeName != 'TEXTAREA',
+      data = {};
+
+  if (input) {
+    if (esc) {
+      // restore state
+      document.execCommand('undo');
+      el.blur();
+    } else if (nl) {
+      // save
+      data[el.getAttribute('data-name')] = el.innerHTML;
+
+
+      log(JSON.stringify(data));
+
+      el.blur();
+      event.preventDefault();
+    }
+  }
+}, true);
+
+function log(s) {
+  document.getElementById('testOne');
+}
+
+function log(a) {
+  document.getElementById('testTwo');
+}
+</script>
+
+</body>
+</html>
