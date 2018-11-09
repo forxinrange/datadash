@@ -78,21 +78,40 @@ var GLOBAL_EDIT_SECTIONS = 0; // Global counter for field ID's
 // Populate select boxes with array data
 
 function create_select_element(element){
-    var box_values = new Array('field','value','subvalue','subvalue2','result');
+    var box_values = new Array('field','value','function','field2','value','result'); // last must always be result
     var M_Form = GLOBAL_EDIT_SECTIONS+'masterForm';
-    var deleteButton = '<input id="'+GLOBAL_EDIT_SECTIONS+'del" type="button" value="delete" onclick="delete_form("'+M_Form+');">';
-
+    // var deleteButton = '<input id="'+GLOBAL_EDIT_SECTIONS+'del" type="button" value="delete" onclick="delete_form("'+M_Form+');">';
 
     document.getElementById(element).innerHTML += "<form id='"+M_Form+"'>";
     document.getElementById(element).innerHTML += "</form>";
-    //document.getElementById(element).innerHTML += deleteButton;
 
     outputForm = document.getElementById(M_Form);
     for(var i = 0; i < box_values.length; i++){
-        var elem = document.createElement("select");
-        elem.id=GLOBAL_EDIT_SECTIONS+box_values[i];
-        outputForm.appendChild(elem);
+        if(i != box_values.length-1){
+            var elem = document.createElement("select");
+            elem.id=GLOBAL_EDIT_SECTIONS+box_values[i];
+            outputForm.appendChild(elem);
+        }
+        else{
+            var elem = document.createElement("input");
+            elem.id=GLOBAL_EDIT_SECTIONS+box_values[i];
+            elem.type="text";
+            //elem.setAttribute="readonly";
+            outputForm.appendChild(elem);
+        }
     }
+
+    var m_section = document.getElementById(element);
+    delbtn = document.createElement("input");
+    delbtn.id=GLOBAL_EDIT_SECTIONS+'delbtn';
+    delbtn.type="button";
+    delbtn.value="delete";
+    //delbtn.onclick=delete_form(M_Form);
+
+
+
+    m_section.appendChild(delbtn);
+
     retrieve_mySQL_fields(GLOBAL_EDIT_SECTIONS+box_values[0]);
     GLOBAL_EDIT_SECTIONS++;
 }
@@ -140,4 +159,14 @@ function dev_Build_Test(fields,rows,element){
         output += rowArray[i];
     }
     document.getElementById(element).innerHTML = output;
+}
+
+
+function openFP(){
+
+    const { dialog } = require('electron').remote;
+    console.log(dialog);
+
+    
+
 }
