@@ -5,11 +5,18 @@
 
 // Get mySQL server details from connection_details.txt
 
+// GLOBAL VARIABLES
+
+var GLOBAL_XML_STRING = "";
+
+var GLOBAL_EDIT_SECTIONS = 0; // Global counter for field ID's
+
+// GLOBAL VARIABLES END
+
 function read_mySQL_connection_details(){
-    //const {dialog} = require('electron');
+
     var fs = require('fs');
     var details = fs.readFileSync('connection_details.txt').toString().split("\n");
-    //var details = dialog.showOpenDialog({properties: ['openFile']});
     var connectionInfo = {
         host: details[0],
         user: details[1],
@@ -73,46 +80,82 @@ function retrieve_mySQL_fields(element){
 
 // Form creator
 
-var GLOBAL_EDIT_SECTIONS = 0; // Global counter for field ID's
-
 // Populate select boxes with array data
 
-function create_select_element(element){
-    var box_values = new Array('field','value','function','field2','value','result'); // last must always be result
+function create_element_array(element){
+    var box_values = new Array('field_A','value_A','function_A','field2_A','value_A','result_A'); // last must always be result
+
+    var box_values2 = new Array('field_B','value_B','function_B','field2_B','value_B','result_B'); // last must always be result
+
+    var modifier_values = new Array('MODIFIER','<','>','=','-','+',)
+
     var M_Form = GLOBAL_EDIT_SECTIONS+'masterForm';
-    // var deleteButton = '<input id="'+GLOBAL_EDIT_SECTIONS+'del" type="button" value="delete" onclick="delete_form("'+M_Form+');">';
 
     document.getElementById(element).innerHTML += "<form id='"+M_Form+"'>";
+
     document.getElementById(element).innerHTML += "</form>";
 
     outputForm = document.getElementById(M_Form);
-    for(var i = 0; i < box_values.length; i++){
-        if(i != box_values.length-1){
+
+    for(var i = 0; i < box_values.length+1; i++){
+        if(i <= box_values.length-2){
             var elem = document.createElement("select");
             elem.id=GLOBAL_EDIT_SECTIONS+box_values[i];
             outputForm.appendChild(elem);
+            write_select_header(elem,box_values[i]);
         }
-        else{
+        else if(i == box_values.length-1){
             var elem = document.createElement("input");
             elem.id=GLOBAL_EDIT_SECTIONS+box_values[i];
             elem.type="text";
-            //elem.setAttribute="readonly";
             outputForm.appendChild(elem);
         }
     }
 
-    var m_section = document.getElementById(element);
-    delbtn = document.createElement("input");
-    delbtn.id=GLOBAL_EDIT_SECTIONS+'delbtn';
-    delbtn.type="button";
-    delbtn.value="delete";
-    //delbtn.onclick=delete_form(M_Form);
+    var modBox = document.createElement("select");
+    modBox.id=GLOBAL_EDIT_SECTIONS+'modbox';
+    outputForm.appendChild(modBox);
 
+    for(var i = 0;i < modifier_values.length;i++){
+        var elem = document.createElement("option");
+        elem.textContent = modifier_values[i];
+        elem.value = modifier_values[i];
+        modBox.appendChild(elem);
+    }
 
+    for(var i = 0; i < box_values2.length+1; i++){
+        if(i <= box_values2.length-2){
+            var elem = document.createElement("select");
+            elem.id=GLOBAL_EDIT_SECTIONS+box_values2[i];
+            outputForm.appendChild(elem);
+            write_select_header(elem,box_values2[i]);
+        }
+        else if(i == box_values.length-1){
+            var elem = document.createElement("input");
+            elem.id=GLOBAL_EDIT_SECTIONS+box_values2[i];
+            elem.type="text";
+            outputForm.appendChild(elem);
+            write_select_header(elem,box_values2[i]);
+        }
+        else{
+            //var m_section = document.getElementById(element);
+            var outputS = "<input id='delete"+GLOBAL_EDIT_SECTIONS+"'"+" type='button'"+" value='-' "+"onclick=delete_form('"+M_Form+"'"+");>";
+            outputForm.innerHTML += outputS;
+        }
+    }
 
-    m_section.appendChild(delbtn);
+    outputForm.innerHTML += "<p>";
+    var masterResult = document.createElement("input");
+    masterResult.id = GLOBAL_EDIT_SECTIONS+"masterResult";
+    masterResult.type = "text";
+    outputForm.appendChild(masterResult);
+
+    outputForm.innerHTML += "<p>";
 
     retrieve_mySQL_fields(GLOBAL_EDIT_SECTIONS+box_values[0]);
+
+    retrieve_mySQL_fields(GLOBAL_EDIT_SECTIONS+box_values2[0]);
+
     GLOBAL_EDIT_SECTIONS++;
 }
 
@@ -132,6 +175,12 @@ function populate_select_elements(element, array, header){
     }
 }
 
+function write_select_header(element,header){
+    var elem = document.createElement("option");
+    elem.textContent = header;
+    elem.value = header;
+    element.appendChild(elem);
+}
 
 // ########## DEV TOOLS ONLY NOT FOR PROD ###########
 
