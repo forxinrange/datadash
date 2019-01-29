@@ -58,6 +58,26 @@ function query_mySQL_database(sql_query,element){
     })
 }
 
+// Field functions
+
+function get_sql_records(field_name,select_element){
+
+    var connection = establish_mySQL_connection();
+    connection.connect();
+    var sql_command = "SELECT * FROM " + read_target_table();
+    connection.query(sql_command, function(error, rows, fields){
+
+        var row_records = new Array;
+        for(var r = 0; r < rows.length; r++){
+            row_records.push(rows[r][field_name]);
+        }
+        populate_select_elements(select_element,row_records,field_name);
+
+    })
+
+}
+
+
 // Function to get all field names from target table and pipe them into return function
 
 function retrieve_mySQL_fields(element){
@@ -78,14 +98,54 @@ function retrieve_mySQL_fields(element){
     })
 }
 
+
+function add_functionality(select_object,reference,position){
+
+    if(reference == 'field_A'){
+
+        var att = document.createAttribute("onchange");
+        var value = select_object.value;
+        att.value="get_sql_records(this.value,'"+position+"value_A');";
+        select_object.setAttributeNode(att);
+
+        // EXAMPLE FUNCTION
+    }
+    else if(reference == 'value_A'){
+
+        var att = document.createAttribute("onchange");
+        var value = select_object.value;
+        att.value="populate_select_elements("+position+"function_A);";
+
+    }
+
+}
+
+
+function process_selects(){
+
+    var master_boxes = new Array('field_A','value_A','function_A','field2_A','value2_A','result_A','field_B','value_B','function_B','field2_B','value2_B','result_B');
+
+    for(var i = 0; i < GLOBAL_EDIT_SECTIONS;i++){
+
+        for(var x = 0; x < master_boxes.length; x++){
+
+            proc_object = document.getElementById(i+master_boxes[x]);
+            add_functionality(proc_object,master_boxes[x],i);
+
+        }
+
+    }
+
+}
+
 // Form creator
 
 // Populate select boxes with array data
 
 function create_element_array(element){
-    var box_values = new Array('field_A','value_A','function_A','field2_A','value_A','result_A'); // last must always be result
+    var box_values = new Array('field_A','value_A','function_A','field2_A','value2_A','result_A'); // last must always be result
 
-    var box_values2 = new Array('field_B','value_B','function_B','field2_B','value_B','result_B'); // last must always be result
+    var box_values2 = new Array('field_B','value_B','function_B','field2_B','value2_B','result_B'); // last must always be result
 
     var modifier_values = new Array('MODIFIER','<','>','=','-','+',)
 
@@ -157,6 +217,8 @@ function create_element_array(element){
     retrieve_mySQL_fields(GLOBAL_EDIT_SECTIONS+box_values2[0]);
 
     GLOBAL_EDIT_SECTIONS++;
+
+    process_selects();
 }
 
 function delete_form(element){
@@ -181,6 +243,7 @@ function write_select_header(element,header){
     elem.value = header;
     element.appendChild(elem);
 }
+
 
 // ########## DEV TOOLS ONLY NOT FOR PROD ###########
 
@@ -210,11 +273,9 @@ function dev_Build_Test(fields,rows,element){
     document.getElementById(element).innerHTML = output;
 }
 
-
 function openFP(){
 
     const { dialog } = require('electron').remote;
-    console.log(dialog);
 
     
 

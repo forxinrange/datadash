@@ -33,6 +33,17 @@ const nativeMenus = [
         ]
     },
     {
+        label: 'Config',
+        submenu: [
+            {
+                label: 'Connection Details',
+                click(){
+                    openServerDetails()
+                }
+            }
+        ]
+    },
+    {
         label: 'DevTools',
         submenu: [
             {
@@ -77,6 +88,28 @@ function openEditorWindow(){
     newWindow.loadFile('editor.html')
 
     newWindow.on('closed',function(){
+        newWindow = null
+    })
+}
+
+// Connection details window
+
+function openServerDetails(){
+    if(newWindow){
+        newWindow.focus()
+        return
+    }
+
+    newWindow = new BrowserWindow({
+
+        height: 728,
+        width: 728
+
+    })
+
+    newWindow.loadFile('con_input.html')
+
+    newWindow.on('closed', function(){
         newWindow = null
     })
 }
