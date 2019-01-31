@@ -7,8 +7,6 @@
 
 // GLOBAL VARIABLES
 
-var GLOBAL_XML_STRING = "";
-
 var GLOBAL_EDIT_SECTIONS = 0; // Global counter for field ID's
 
 // GLOBAL VARIABLES END
@@ -77,7 +75,6 @@ function get_sql_records(field_name,select_element){
 
 }
 
-
 // Function to get all field names from target table and pipe them into return function
 
 function retrieve_mySQL_fields(element){
@@ -98,6 +95,40 @@ function retrieve_mySQL_fields(element){
     })
 }
 
+function save_edit_config(){
+
+    const fs = require('fs');
+    const path = './default.dash';
+    if(fs.existsSync(path)){
+        fs.unlinkSync('default.dash');
+    }
+    var filter_element_array = new Array;
+    var master_element_array = document.getElementsByTagName('*');
+    for(var i = 0;i < master_element_array.length; i++){
+
+        if(master_element_array[i].tagName == "SELECT"){
+
+            filter_element_array.push(master_element_array[i].value);
+
+        }
+
+        //filter_element_array.push(master_element_array[i].tagName);
+
+    }
+    
+    // testing
+
+    for(var x = 0; x < filter_element_array.length; x++){
+
+        fs.appendFileSync('default.dash', filter_element_array[x]);
+        fs.appendFileSync('default.dash', "\n");
+
+    }
+
+
+}
+
+// Set on change clauses for select items and populate functions across select objects within main edit window
 
 function add_functionality(select_object,reference,position){
 
@@ -110,16 +141,32 @@ function add_functionality(select_object,reference,position){
 
         // EXAMPLE FUNCTION
     }
-    else if(reference == 'value_A'){
+    else if(reference == 'field2_A'){
 
         var att = document.createAttribute("onchange");
         var value = select_object.value;
-        att.value="populate_select_elements("+position+"function_A);";
+        att.value="get_sql_records(this.value,'"+position+"value2_A');";
+        select_object.setAttributeNode(att);
+
+    }
+    else if(reference == 'field_B'){
+
+        var att = document.createAttribute("onchange");
+        var value = select_object.value;
+        att.value="get_sql_records(this.value,'"+position+"value_B');";
+        select_object.setAttributeNode(att);
+
+    }
+    else if(reference == 'field2_B'){
+
+        var att = document.createAttribute("onchange");
+        var value = select_object.value;
+        att.value="get_sql_records(this.value,'"+position+"value2_B');";
+        select_object.setAttributeNode(att);
 
     }
 
 }
-
 
 function process_selects(){
 
@@ -143,12 +190,14 @@ function process_selects(){
 // Populate select boxes with array data
 
 function create_element_array(element){
+
+    // Declare Arrays
     var box_values = new Array('field_A','value_A','function_A','field2_A','value2_A','result_A'); // last must always be result
-
     var box_values2 = new Array('field_B','value_B','function_B','field2_B','value2_B','result_B'); // last must always be result
+    var modifier_values = new Array('MODIFIER','<','>','=','-','+',);
+    var functional_values = new Array('COUNT','COUNT WITH','DISPLAY');
 
-    var modifier_values = new Array('MODIFIER','<','>','=','-','+',)
-
+    // Declare generated form name based on global count
     var M_Form = GLOBAL_EDIT_SECTIONS+'masterForm';
 
     document.getElementById(element).innerHTML += "<form id='"+M_Form+"'>";
@@ -198,7 +247,6 @@ function create_element_array(element){
             write_select_header(elem,box_values2[i]);
         }
         else{
-            //var m_section = document.getElementById(element);
             var outputS = "<input id='delete"+GLOBAL_EDIT_SECTIONS+"'"+" type='button'"+" value='-' "+"onclick=delete_form('"+M_Form+"'"+");>";
             outputForm.innerHTML += outputS;
         }
@@ -213,8 +261,11 @@ function create_element_array(element){
     outputForm.innerHTML += "<p>";
 
     retrieve_mySQL_fields(GLOBAL_EDIT_SECTIONS+box_values[0]);
-
+    retrieve_mySQL_fields(GLOBAL_EDIT_SECTIONS+box_values[3]);
     retrieve_mySQL_fields(GLOBAL_EDIT_SECTIONS+box_values2[0]);
+    retrieve_mySQL_fields(GLOBAL_EDIT_SECTIONS+box_values2[3]);
+    populate_select_elements(GLOBAL_EDIT_SECTIONS+box_values[2],functional_values,'FUNCTION');
+    populate_select_elements(GLOBAL_EDIT_SECTIONS+box_values2[2],functional_values,'FUNCITON');
 
     GLOBAL_EDIT_SECTIONS++;
 
@@ -222,7 +273,9 @@ function create_element_array(element){
 }
 
 function delete_form(element){
+
     document.getElementById(element).outerHTML = "";
+    
 }
 
 function populate_select_elements(element, array, header){
@@ -276,7 +329,5 @@ function dev_Build_Test(fields,rows,element){
 function openFP(){
 
     const { dialog } = require('electron').remote;
-
-    
 
 }
